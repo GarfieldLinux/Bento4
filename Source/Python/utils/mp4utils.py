@@ -266,7 +266,7 @@ def Bento4Command(options, name, *args, **kwargs):
 
     cmd += args
     if options.debug:
-        print 'COMMAND: ', cmd
+        print 'COMMAND: ', " ".join(cmd), cmd
     try:
         try:
             return check_output(cmd)
@@ -445,6 +445,8 @@ class Mp4Track:
         # compute the max segment bitrates
         if len(self.segment_bitrates) > 1:
             self.max_segment_bitrate = max(self.segment_bitrates[:-1])
+        else:
+            self.max_segment_bitrate = self.average_segment_bitrate
 
         # compute the bandwidth
         if options.min_buffer_time == 0.0:
@@ -651,6 +653,7 @@ class Mp4File:
 class MediaSource:
     def __init__(self, name):
         self.name = name
+        self.track_key_infos = {}
         if name.startswith('[') and ']' in name:
             try:
                 params = name[1:name.find(']')]
